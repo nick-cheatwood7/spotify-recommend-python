@@ -29,7 +29,7 @@ def main():
 
     # Normalize the data
     recommender = sp.SpotifyRecommender(data)
-    print(recommender.get_recommendations("Runaway", 20))
+    print(recommender.get_recommendations("Re: Stacks", 20))
 
 
 if __name__ == "__main__":

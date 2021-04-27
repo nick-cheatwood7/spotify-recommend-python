@@ -33,7 +33,17 @@ class SpotifyRecommender:
         for songs in tqdm(rec.values):
             d = 0
             for column in np.arange(len(rec.columns)):
-                if not column in [0, 1, 5, 6, 7]:
+                if not column in [
+                    0,
+                    1,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    13,
+                    19,
+                ]:  # Filter out unwanted columns
                     d = d + np.absolute(float(song[column]) - float(songs[column]))
 
             distance.append(d)

@@ -56,11 +56,11 @@ class SpotifyRecommender:
     def normalize_data(self):
         # Normalize data types in the dataset
         datatypes = ["int16", "int32", "int64", "float16", "float32", "float64"]
-        normarization = self.dataset.select_dtypes(include=datatypes)
-        for col in normarization.columns:
+        norms = self.dataset.select_dtypes(include=datatypes)
+        for col in norms.columns:
             MinMaxScaler(col)
 
         kmeans = KMeans(n_clusters=10)
-        features = kmeans.fit_predict(normarization)
+        features = kmeans.fit_predict(norms)
         self.dataset["features"] = features
         MinMaxScaler(self.dataset["features"])

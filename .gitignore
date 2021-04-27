@@ -1,0 +1,2 @@
+# Ignore data files stored in the /data/ directory
+data/**

@@ -27,9 +27,14 @@ def main():
     # Test for empty values again
     data.isnull().sum()
 
-    # Normalize the data
+    # Init the recommender instance
     recommender = sp.SpotifyRecommender(data)
+
+    # Get recommendation by Track title
     print(recommender.get_recommendations("Re: Stacks", 20))
+
+    # Get recommendation by Track Id
+    print(recommender.get_recommendations_byId("2LthqyP0MLhGUBICwR1535", 20))
 
 
 if __name__ == "__main__":

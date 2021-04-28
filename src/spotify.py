@@ -17,18 +17,21 @@ class SpotifyRecommender:
     def __init__(self, dataset):
         self.dataset = dataset
 
-    def get_recommendations(self, songs, amount=1):
+    def get_recommendations(self, track_title, amount=1):
+
+        # Notify the user of thre process
+        print("Getting recommended songs based on " + track_title + "...")
 
         # normalize the data
         self.normalize_data()
 
         distance = []
         song = (
-            self.dataset[(self.dataset.name.str.lower() == songs.lower())]
+            self.dataset[(self.dataset.name.str.lower() == track_title.lower())]
             .head(1)
             .values[0]
         )
-        rec = self.dataset[self.dataset.name.str.lower() != songs.lower()]
+        rec = self.dataset[self.dataset.name.str.lower() != track_title.lower()]
 
         for songs in tqdm(rec.values):
             d = 0
@@ -51,6 +54,46 @@ class SpotifyRecommender:
         rec["distance"] = distance
         rec = rec.sort_values("distance")
         columns = ["artists", "name"]
+
+        return rec[columns][:amount]
+
+    def get_recommendations_byId(self, track_id, amount=1):
+
+        # Notify the user of thre process
+        print("Getting recommended songs based on Track Id: " + track_id + "...")
+
+        # normalize the data
+        self.normalize_data()
+
+        distance = []
+        song = (
+            self.dataset[(self.dataset.id.str.lower() == track_id.lower())]
+            .head(1)
+            .values[0]
+        )
+        rec = self.dataset[self.dataset.id.str.lower() != track_id.lower()]
+
+        for songs in tqdm(rec.values):
+            d = 0
+            for column in np.arange(len(rec.columns)):
+                if not column in [
+                    0,
+                    1,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    13,
+                    19,
+                ]:  # Filter out unwanted columns
+                    d = d + np.absolute(float(song[column]) - float(songs[column]))
+
+            distance.append(d)
+
+        rec["distance"] = distance
+        rec = rec.sort_values("distance")
+        columns = ["artists", "name", "id"]
 
         return rec[columns][:amount]
 
